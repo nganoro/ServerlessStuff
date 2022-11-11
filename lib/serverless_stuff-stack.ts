@@ -15,6 +15,7 @@ export class ServerlessStuffStack extends cdk.Stack {
   private awb3Table = new DynamoDb(
       'awb3Table',
       'User_Id',
+      'proficiency',
       this
   )
 

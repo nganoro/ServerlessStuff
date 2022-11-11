@@ -1,4 +1,4 @@
-import {AttributeType, GlobalSecondaryIndexProps, LocalSecondaryIndexProps, ProjectionType, Table} from 'aws-cdk-lib/aws-dynamodb';
+import {AttributeType, ProjectionType, Table} from 'aws-cdk-lib/aws-dynamodb';
 import {Stack} from "aws-cdk-lib";
 
 
@@ -8,12 +8,13 @@ export class DynamoDb {
     private primaryKey: string;
     private stack: Stack;
     private table: Table;
-    public sortKey = 'proficiency';
+    public sortKey: string;
 
-    public constructor(name: string, primaryKey: string, stack: Stack) {
+    public constructor(name: string, primaryKey: string, sortKey: string, stack: Stack) {
         this.name = name;
         this.primaryKey = primaryKey;
         this.stack = stack;
+        this.sortKey = sortKey;
         this.initialize();
     }
 
@@ -33,46 +34,41 @@ export class DynamoDb {
             }
         })
 
-        const localSecondaryIndexProps: LocalSecondaryIndexProps = {
-            indexName: 'proficiency-index',
-            sortKey: {
-                name: 'proficiency',
-                type: AttributeType.STRING,
-            },
-
-            // the properties below are optional
-            projectionType: ProjectionType.ALL
-        };
-
-        const globalSecondaryIndexProps: GlobalSecondaryIndexProps = {
-            indexName: 'proficiency-service-index',
-            partitionKey: {
-                name: 'proficiency',
-                type: AttributeType.STRING,
-            },
-
-            // the properties below are optional
+        this.table.addLocalSecondaryIndex({
+            indexName: "service-index",
             projectionType: ProjectionType.ALL,
             sortKey: {
                 name: 'service',
                 type: AttributeType.STRING,
-            },
-        };
+            }
 
-        const globalSecondaryIndexProps2: GlobalSecondaryIndexProps = {
-            indexName: 'team-proficiency-index',
+        })
+
+        this.table.addGlobalSecondaryIndex({
+            indexName: "proficiency-service-index",
+            partitionKey: {
+                name: 'proficiency',
+                type: AttributeType.STRING,
+            },
+            projectionType: ProjectionType.ALL,
+            sortKey: {
+                name: 'service',
+                type: AttributeType.STRING,
+            }
+        })
+
+        this.table.addGlobalSecondaryIndex({
+            indexName: "team-proficiency-index",
             partitionKey: {
                 name: 'team',
                 type: AttributeType.STRING,
             },
-
-            // the properties below are optional
             projectionType: ProjectionType.ALL,
             sortKey: {
                 name: 'proficiency',
                 type: AttributeType.STRING,
-            },
-        };
+            }
+        })
 
     }
 
