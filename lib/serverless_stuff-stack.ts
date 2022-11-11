@@ -5,12 +5,18 @@ import {join} from 'path';
 import {Bucket} from "aws-cdk-lib/aws-s3";
 import {Authorization} from "../Infrastructure/Authorization";
 import {AuthorizationType, LambdaIntegration, MethodOptions, RestApi} from "aws-cdk-lib/aws-apigateway";
+import {DynamoDb} from "../Infrastructure/DynamoDb";
 
 
 export class ServerlessStuffStack extends cdk.Stack {
 
   private api = new RestApi(this, 'ServerlessStuffStack');
   private authorizer: Authorization;
+  private awb3Table = new DynamoDb(
+      'awb3Table',
+      'User_Id',
+      this
+  )
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
