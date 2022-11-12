@@ -23,6 +23,9 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.108",
+    "@types/uuid": "^8.3.4",
+    "aws-sdk": "^2.1253.0",
     "source-map-support": "^0.5.21"
   }
 }

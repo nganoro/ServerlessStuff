@@ -26,11 +26,11 @@ export class ServerlessStuffStack extends cdk.Stack {
 
     new Bucket(this, 'AWSBuilderBucket4Nate', {})
 
-    const firstLambda = new Function(this, 'helloLambda', {
+    const firstLambda = new Function(this, 'postLambda', {
       runtime: Runtime.NODEJS_14_X,
       memorySize: 512,
-      handler: 'app.handler',
-      code: Code.fromAsset(join(__dirname, '../services/lambdas'))
+      handler: 'POST.handler',
+      code: Code.fromAsset(join(__dirname, '../services/Database'))
     })
 
     const optionsWithAuthorizer: MethodOptions = {

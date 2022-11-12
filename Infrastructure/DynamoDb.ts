@@ -1,7 +1,6 @@
 import {AttributeType, ProjectionType, Table} from 'aws-cdk-lib/aws-dynamodb';
 import {Stack} from "aws-cdk-lib";
 
-
 export class DynamoDb {
 
     private name: string;
@@ -31,7 +30,8 @@ export class DynamoDb {
             sortKey: {
                 name: this.sortKey,
                 type: AttributeType.STRING
-            }
+            },
+            tableName: this.name
         })
 
         this.table.addLocalSecondaryIndex({
