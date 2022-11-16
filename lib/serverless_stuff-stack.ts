@@ -21,11 +21,12 @@ export class ServerlessStuffStack extends cdk.Stack {
     },
   });
   private authorizer: Authorization;
-  private awb3Table = new DynamoDb(
-      'awb3Table',
-      'User_Id',
-      'proficiency',
-      this
+  private awb3Table = new DynamoDb(this, {
+        tableName: 'awb3Table',
+        primaryKey: 'User_Id',
+        sortKey: 'proficiency',
+        postLambdaPath: 'POST'
+      }
   )
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -34,13 +35,12 @@ export class ServerlessStuffStack extends cdk.Stack {
     this.authorizer = new Authorization(this, this.api);
     new Bucket(this, 'AWSBuilderBucket4Nate', {})
 
-    const firstLambda = new NodejsFunction(this, 'postLambda', {
-      runtime: Runtime.NODEJS_14_X,
-      memorySize: 512,
-      handler: 'handler',
-      entry: path.join(__dirname, '../services/Database/POST.ts'),
-      functionName: 'ab3PostLambda '
-    })
+    // const firstLambda = new NodejsFunction(this, 'postLambda', {
+    //   runtime: Runtime.NODEJS_14_X,
+    //   memorySize: 512,
+    //   handler: 'handler',
+    //   entry: path.join(__dirname, '../services/Database/POST.ts')
+    // })
 
 
     const optionsWithAuthorizer: MethodOptions = {
@@ -50,10 +50,14 @@ export class ServerlessStuffStack extends cdk.Stack {
       }
     }
 
+    // const helloLambdaIntegeration = new LambdaIntegration(firstLambda);
+    // const helloLambdaResource = this.api.root.addResource('hello');
+    // helloLambdaResource.addMethod('POST', helloLambdaIntegeration, optionsWithAuthorizer);
+
     //helloLambda Integeration with API
-    const helloLambdaIntegeration = new LambdaIntegration(firstLambda);
-    const helloLambdaResource = this.api.root.addResource('hello');
-    helloLambdaResource.addMethod('POST', helloLambdaIntegeration, optionsWithAuthorizer);
+    // const helloLambdaIntegeration = new LambdaIntegration(firstLambda);
+    const postLambdaResource = this.api.root.addResource('hello');
+    postLambdaResource.addMethod('POST', this.awb3Table.postLambdaIntegration, optionsWithAuthorizer);
 
   }
 }
