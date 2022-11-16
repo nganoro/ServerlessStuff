@@ -1,13 +1,16 @@
-// @ts-ignore
-import { v4 } from 'uuid'
+import {APIGatewayProxyEventV2, APIGatewayProxyResultV2} from 'aws-lambda';
 
-async function handler(event: any, context: any){
-    console.log('Got an event:')
-    console.log(event)
+export async function main(
+    event: APIGatewayProxyEventV2,
+): Promise<APIGatewayProxyResultV2>{
+    console.log('Got an event:', event)
+
     return {
         statusCode: 200,
-        body: 'Hello from lambda!' + v4()
-    }
+        body: JSON.stringify({message: 'Successful lambda invocation'}),
+        headers: {
+        'Access-Control-Allow-Origin': '*'
+        }
+    };
 }
 
-export {handler}
