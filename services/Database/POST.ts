@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda
 
 const dbClient = new DynamoDB.DocumentClient();
 
-export async function newItem(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
+export async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
 
     const result: APIGatewayProxyResult = {
         statusCode: 200,
@@ -13,13 +13,8 @@ export async function newItem(event: APIGatewayProxyEvent, context: Context): Pr
         },
     }
 
-    let body: any;
+    const body = typeof event.body == 'object'? event.body: JSON.parse(event.body);
 
-    if(event.body){
-        body = JSON.parse(event.body);
-    } else {
-        result.body = 'body is invalid';
-    }
 
     const item = {
         User_Id: 'User_id_CDK',
@@ -43,20 +38,3 @@ export async function newItem(event: APIGatewayProxyEvent, context: Context): Pr
     return result;
 
 }
-
-// async function save(event : any) {
-//     const name = event.queryStringParameters.name;
-//
-//     const item = {
-//         name: name,
-//         date: Date.now(),
-//     };
-//
-//     console.log(item);
-//     const savedItem = await saveItem(item);
-//
-//     return {
-//         statusCode: 200,
-//         body: JSON.stringify(savedItem),
-//     };
-// };

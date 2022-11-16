@@ -37,8 +37,9 @@ export class ServerlessStuffStack extends cdk.Stack {
     const firstLambda = new NodejsFunction(this, 'postLambda', {
       runtime: Runtime.NODEJS_14_X,
       memorySize: 512,
-      handler: 'newItem',
-      entry: path.join(__dirname, '../services/Database/POST.ts')
+      handler: 'handler',
+      entry: path.join(__dirname, '../services/Database/POST.ts'),
+      functionName: 'ab3PostLambda '
     })
 
 
@@ -48,12 +49,6 @@ export class ServerlessStuffStack extends cdk.Stack {
         authorizerId: this.authorizer.authorizer.authorizerId
       }
     }
-
-    // firstLambda.addFunctionUrl({
-    //   cors: {
-    //     allowedOrigins: ['*']
-    //   }
-    // })
 
     //helloLambda Integeration with API
     const helloLambdaIntegeration = new LambdaIntegration(firstLambda);
