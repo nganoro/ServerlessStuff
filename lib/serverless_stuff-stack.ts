@@ -25,7 +25,8 @@ export class ServerlessStuffStack extends cdk.Stack {
         tableName: 'awb3Table',
         primaryKey: 'User_Id',
         sortKey: 'proficiency',
-        postLambdaPath: 'POST'
+        postLambdaPath: 'POST',
+        readLambdaPath: 'READ'
       }
   )
 
@@ -35,14 +36,6 @@ export class ServerlessStuffStack extends cdk.Stack {
     this.authorizer = new Authorization(this, this.api);
     new Bucket(this, 'AWSBuilderBucket4Nate', {})
 
-    // const firstLambda = new NodejsFunction(this, 'postLambda', {
-    //   runtime: Runtime.NODEJS_14_X,
-    //   memorySize: 512,
-    //   handler: 'handler',
-    //   entry: path.join(__dirname, '../services/Database/POST.ts')
-    // })
-
-
     const optionsWithAuthorizer: MethodOptions = {
       authorizationType: AuthorizationType.COGNITO,
       authorizer: {
@@ -50,14 +43,13 @@ export class ServerlessStuffStack extends cdk.Stack {
       }
     }
 
-    // const helloLambdaIntegeration = new LambdaIntegration(firstLambda);
-    // const helloLambdaResource = this.api.root.addResource('hello');
-    // helloLambdaResource.addMethod('POST', helloLambdaIntegeration, optionsWithAuthorizer);
-
     //helloLambda Integeration with API
-    // const helloLambdaIntegeration = new LambdaIntegration(firstLambda);
     const postLambdaResource = this.api.root.addResource('hello');
     postLambdaResource.addMethod('POST', this.awb3Table.postLambdaIntegration, optionsWithAuthorizer);
+
+    //read lambda resource & Integeration
+    const readLamdbaResource = this.api.root.addResource('experts');
+    readLamdbaResource.addMethod('GET', this.awb3Table.readLambdaIntegration, optionsWithAuthorizer);
 
   }
 }

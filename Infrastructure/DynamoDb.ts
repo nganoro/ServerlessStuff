@@ -98,10 +98,10 @@ export class DynamoDb {
             this.postLambda = this.createSingleLambda(this.props.postLambdaPath)
             this.postLambdaIntegration = new LambdaIntegration(this.postLambda);
         }
-        // if (this.props.readLambdaPath) {
-        //     this.readLambda = this.createSingleLambda(this.props.readLambdaPath)
-        //     this.readLambdaIntegration = new LambdaIntegration(this.readLambda);
-        // }
+        if (this.props.readLambdaPath) {
+            this.readLambda = this.createSingleLambda(this.props.readLambdaPath)
+            this.readLambdaIntegration = new LambdaIntegration(this.readLambda);
+        }
         // if (this.props.updateLambdaPath) {
         //     this.updateLambda = this.createSingleLambda(this.props.updateLambdaPath)
         //     this.updateLambdaIntegration = new LambdaIntegration(this.updateLambda);
@@ -116,9 +116,9 @@ export class DynamoDb {
         if(this.postLambda){
             this.table.grantWriteData(this.postLambda);
         }
-        // if(this.readLambda){
-        //     this.table.grantReadData(this.readLambda)
-        // }
+        if(this.readLambda){
+            this.table.grantReadData(this.readLambda)
+        }
         // if(this.updateLambda){
         //     this.table.grantWriteData(this.updateLambda)
         // }
@@ -136,12 +136,4 @@ export class DynamoDb {
             handler: 'handler'
         })
     }
-
-    // const firstLambda = new NodejsFunction(this, 'postLambda', {
-    //   runtime: Runtime.NODEJS_14_X,
-    //   memorySize: 512,
-    //   handler: 'handler',
-    //   entry: path.join(__dirname, '../services/Database/POST.ts')
-    // })
-
 }

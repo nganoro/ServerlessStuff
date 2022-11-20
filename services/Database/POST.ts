@@ -15,12 +15,11 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
 
     const body = typeof event.body == 'object'? event.body: JSON.parse(event.body);
 
-
     const item = {
-        User_Id: 'User_id_CDK',
+        User_Id: body.user_name,
         proficiency: body.proficiency,
-        first_name: body.firstName,
-        last_name: body.lastName,
+        first_name: body.first_name,
+        last_name: body.last_name,
         service: body.service,
         team: body.team,
         title: body.title
