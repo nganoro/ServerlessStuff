@@ -25,7 +25,7 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
                         ':U': keyValue
                     },
                     KeyConditionExpression: 'User_Id = :U',
-                    ProjectionExpression: 'User_Id, proficiency, first_name, last_name, service, team, title, user_name',
+                    ProjectionExpression: 'User_Id, proficiency, first_name, last_name, service, team, title, user_name, email',
                     // FilterExpression: 'contains (Subtitle, :topic)'
                 }).promise();
                 result.body = JSON.stringify(queryResponse);
