@@ -89,9 +89,9 @@ export class ServerlessStuffStack extends cdk.Stack {
     //helloLambda Integeration with API
     const postLambdaResource = this.api.root.addResource('hello');
     postLambdaResource.addMethod('POST', this.awb3Table.postLambdaIntegration, optionsWithAuthorizer);
-    // const s3PresignedURlambdaIntegeration = new LambdaIntegration(s3UploadLambda);
-    // const presignedUrlResource = postLambdaResource.addResource('{type}');
-    // presignedUrlResource.addMethod('GET', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
+    const s3PresignedURlambdaIntegeration = new LambdaIntegration(s3UploadLambda);
+    const presignedUrlResource = postLambdaResource.addResource('{type}');
+    presignedUrlResource.addMethod('GET', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
 
 
         //read lambda resource & Integeration
@@ -104,10 +104,10 @@ export class ServerlessStuffStack extends cdk.Stack {
     updateLamdbaResource.addMethod('PUT', this.awb3Table.updateLambdaIntegration, optionsWithAuthorizer);
 
     // s3URLambda integration
-    const s3PresignedURlambdaIntegeration = new LambdaIntegration(s3UploadLambda);
-    const s3URLambdaResource = this.api.root.addResource('presignedURL');
-    s3URLambdaResource.addMethod('GET', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
-    s3URLambdaResource.addMethod('PUT', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
+    // const s3PresignedURlambdaIntegeration = new LambdaIntegration(s3UploadLambda);
+    // const s3URLambdaResource = this.api.root.addResource('presignedURL');
+    // s3URLambdaResource.addMethod('GET', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
+    // s3URLambdaResource.addMethod('PUT', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
 
     }
 
