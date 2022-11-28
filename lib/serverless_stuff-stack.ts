@@ -29,7 +29,8 @@ export class ServerlessStuffStack extends cdk.Stack {
         sortKey: 'proficiency',
         postLambdaPath: 'POST',
         readLambdaPath: 'READ',
-        updateLambdaPath: 'UPDATE'
+        updateLambdaPath: 'UPDATE',
+        teamReadLambdaPath: 'teamREAD'
       }
   )
 
@@ -102,6 +103,10 @@ export class ServerlessStuffStack extends cdk.Stack {
     //update lambda resource & Integeration
     const updateLamdbaResource = this.api.root.addResource('update');
     updateLamdbaResource.addMethod('PUT', this.awb3Table.updateLambdaIntegration, optionsWithAuthorizer);
+
+    //update lambda resource & Integeration
+    const teamReadLambdaResource = this.api.root.addResource('teams');
+    teamReadLambdaResource.addMethod('GET', this.awb3Table.teamReadLambdaIntegration, optionsWithAuthorizer);
 
     // s3URLambda integration
     // const s3PresignedURlambdaIntegeration = new LambdaIntegration(s3UploadLambda);

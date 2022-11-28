@@ -12,7 +12,9 @@ export interface TableProps {
     postLambdaPath?: string,
     readLambdaPath?: string,
     updateLambdaPath?: string,
-    deleteLambdaPath?: string
+    deleteLambdaPath?: string,
+    teamReadLambdaPath?: string,
+
 }
 
 export class DynamoDb {
@@ -25,11 +27,13 @@ export class DynamoDb {
     private readLambda: NodejsFunction | undefined;
     private updateLambda: NodejsFunction | undefined;
     private deleteLambda: NodejsFunction | undefined;
+    private teamReadLambda: NodejsFunction | undefined;
 
     public postLambdaIntegration: LambdaIntegration;
     public readLambdaIntegration: LambdaIntegration;
     public updateLambdaIntegration: LambdaIntegration;
     public deleteLambdaIntegration: LambdaIntegration;
+    public teamReadLambdaIntegration: LambdaIntegration;
 
     public constructor(stack: Stack, props: TableProps) {
         this.stack = stack;
@@ -110,6 +114,10 @@ export class DynamoDb {
         //     this.deleteLambda = this.createSingleLambda(this.props.deleteLambdaPath);
         //     this.deleteLambdaIntegration = new LambdaIntegration(this.deleteLambda);
         // }
+        if (this.props.teamReadLambdaPath) {
+            this.teamReadLambda = this.createSingleLambda(this.props.teamReadLambdaPath)
+            this.teamReadLambdaIntegration = new LambdaIntegration(this.teamReadLambda);
+        }
     }
 
     private grantTableRights(){
@@ -125,6 +133,9 @@ export class DynamoDb {
         // if(this.deleteLambda){
         //     this.table.grantWriteData(this.deleteLambda)
         // }
+        if(this.teamReadLambda){
+            this.table.grantReadData(this.teamReadLambda)
+        }
     }
 
     private createSingleLambda(lambdaName: string): NodejsFunction{
