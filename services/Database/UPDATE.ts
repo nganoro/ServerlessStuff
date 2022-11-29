@@ -28,14 +28,24 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
                         [PRIMARY_KEY]: User_Id,
                         [SORT_KEY]: proficiency
                     },
-                    UpdateExpression: 'set #title = :v_userTitle, #team = :v_team',
+                    UpdateExpression: 'set #title = :v_userTitle, #team = :v_team, #fName = :v_fName, #lName = :v_lName, #service = :v_service, #user_name = :v_user_name, #email = :v_email',
                     ExpressionAttributeNames: {
                         '#title': 'title',
-                        '#team': 'team'
+                        '#team': 'team',
+                        '#fName': 'first_name',
+                        '#lName': 'last_name',
+                        '#service': 'service',
+                        '#user_name': 'user_name',
+                        '#email': 'email'
                     },
                     ExpressionAttributeValues: {
                         ':v_userTitle': requestBody.title,
-                        ':v_team': requestBody.team
+                        ':v_team': requestBody.team,
+                        ':v_fName': requestBody.first_name,
+                        ':v_lName': requestBody.last_name,
+                        ':v_service': requestBody.service,
+                        ':v_user_name': requestBody.user_name,
+                        ':v_email': requestBody.email,
                     },
                     ReturnValues: 'UPDATED_NEW'
                 }

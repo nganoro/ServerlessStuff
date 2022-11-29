@@ -30,7 +30,8 @@ export class ServerlessStuffStack extends cdk.Stack {
         postLambdaPath: 'POST',
         readLambdaPath: 'READ',
         updateLambdaPath: 'UPDATE',
-        teamReadLambdaPath: 'teamREAD'
+        teamReadLambdaPath: 'teamREAD',
+        teamMemberReadLambdaPath: 'teamMemberReadLambda',
       }
   )
 
@@ -95,7 +96,7 @@ export class ServerlessStuffStack extends cdk.Stack {
     presignedUrlResource.addMethod('GET', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
 
 
-        //read lambda resource & Integeration
+    //read lambda resource & Integeration
     const readLamdbaResource = this.api.root.addResource('experts');
     readLamdbaResource.addMethod('GET', this.awb3Table.readLambdaIntegration, optionsWithAuthorizer);
 
@@ -108,11 +109,8 @@ export class ServerlessStuffStack extends cdk.Stack {
     const teamReadLambdaResource = this.api.root.addResource('teams');
     teamReadLambdaResource.addMethod('GET', this.awb3Table.teamReadLambdaIntegration, optionsWithAuthorizer);
 
-    // s3URLambda integration
-    // const s3PresignedURlambdaIntegeration = new LambdaIntegration(s3UploadLambda);
-    // const s3URLambdaResource = this.api.root.addResource('presignedURL');
-    // s3URLambdaResource.addMethod('GET', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
-    // s3URLambdaResource.addMethod('PUT', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
+    const teamMemberReadLambdaResource = this.api.root.addResource('TeamMember');
+    teamMemberReadLambdaResource.addMethod('GET', this.awb3Table.teamMemberReadLambdaIntegration, optionsWithAuthorizer);
 
     }
 
