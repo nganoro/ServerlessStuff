@@ -22,7 +22,9 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
         last_name: body.last_name,
         service: body.service,
         team: body.team,
-        title: body.title
+        title: body.title,
+        email: body.email,
+        user_name: body.user_name
     }
 
     try {
