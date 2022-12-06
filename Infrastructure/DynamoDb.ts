@@ -62,38 +62,28 @@ export class DynamoDb {
             tableName: this.props.tableName
         })
 
-        this.table.addLocalSecondaryIndex({
-            indexName: "service-index",
-            projectionType: ProjectionType.ALL,
-            sortKey: {
-                name: 'service',
-                type: AttributeType.STRING,
-            }
-
-        })
-
         this.table.addGlobalSecondaryIndex({
-            indexName: "proficiency-service-index",
+            indexName: "service-SK-index",
             partitionKey: {
-                name: 'proficiency',
+                name: 'service',
                 type: AttributeType.STRING,
             },
             projectionType: ProjectionType.ALL,
             sortKey: {
-                name: 'service',
+                name: 'SK',
                 type: AttributeType.STRING,
             }
         })
 
         this.table.addGlobalSecondaryIndex({
-            indexName: "team-proficiency-index",
+            indexName: "SK-gsi1-sk-index",
             partitionKey: {
-                name: 'team',
+                name: 'SK',
                 type: AttributeType.STRING,
             },
             projectionType: ProjectionType.ALL,
             sortKey: {
-                name: 'proficiency',
+                name: 'gsi1-sk',
                 type: AttributeType.STRING,
             }
         })

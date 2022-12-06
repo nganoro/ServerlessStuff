@@ -23,17 +23,29 @@ export class ServerlessStuffStack extends cdk.Stack {
   private authorizer: Authorization;
   private suffix: string;
   private ab3AvatatBucket: Bucket;
-  private awb3Table = new DynamoDb(this, {
-        tableName: 'awb3Table',
-        primaryKey: 'User_Id',
-        sortKey: 'proficiency',
-        postLambdaPath: 'POST',
-        readLambdaPath: 'READ',
-        updateLambdaPath: 'UPDATE',
-        teamReadLambdaPath: 'teamREAD',
-        teamMemberReadLambdaPath: 'teamMemberReadLambda',
-      }
-  )
+
+  private ab3FinalTable = new DynamoDb(this, {
+    tableName: 'AB3-Table',
+    primaryKey: 'PK',
+    sortKey: 'SK',
+    postLambdaPath: 'POST',
+    readLambdaPath: 'READ',
+    updateLambdaPath: 'UPDATE',
+    teamReadLambdaPath: 'teamREAD',
+    teamMemberReadLambdaPath: 'teamMemberReadLambda',
+  });
+
+  // private awb3Table = new DynamoDb(this, {
+  //       tableName: 'awb3TableRemove',
+  //       primaryKey: 'User_Id',
+  //       sortKey: 'proficiency',
+  //       postLambdaPath: 'POST',
+  //       readLambdaPath: 'READ',
+  //       updateLambdaPath: 'UPDATE',
+  //       teamReadLambdaPath: 'teamREAD',
+  //       teamMemberReadLambdaPath: 'teamMemberReadLambda',
+  //     }
+  // )
 
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -90,7 +102,7 @@ export class ServerlessStuffStack extends cdk.Stack {
 
     //helloLambda Integeration with API
     const postLambdaResource = this.api.root.addResource('hello');
-    postLambdaResource.addMethod('POST', this.awb3Table.postLambdaIntegration, optionsWithAuthorizer);
+    postLambdaResource.addMethod('POST', this.ab3FinalTable.postLambdaIntegration, optionsWithAuthorizer);
     const s3PresignedURlambdaIntegeration = new LambdaIntegration(s3UploadLambda);
     const presignedUrlResource = postLambdaResource.addResource('{type}');
     presignedUrlResource.addMethod('GET', s3PresignedURlambdaIntegeration, optionsWithAuthorizer);
@@ -98,19 +110,19 @@ export class ServerlessStuffStack extends cdk.Stack {
 
     //read lambda resource & Integeration
     const readLamdbaResource = this.api.root.addResource('experts');
-    readLamdbaResource.addMethod('GET', this.awb3Table.readLambdaIntegration, optionsWithAuthorizer);
+    readLamdbaResource.addMethod('GET', this.ab3FinalTable.readLambdaIntegration, optionsWithAuthorizer);
 
 
     //update lambda resource & Integeration
     const updateLamdbaResource = this.api.root.addResource('update');
-    updateLamdbaResource.addMethod('PUT', this.awb3Table.updateLambdaIntegration, optionsWithAuthorizer);
+    updateLamdbaResource.addMethod('PUT', this.ab3FinalTable.updateLambdaIntegration, optionsWithAuthorizer);
 
     //update lambda resource & Integeration
     const teamReadLambdaResource = this.api.root.addResource('teams');
-    teamReadLambdaResource.addMethod('GET', this.awb3Table.teamReadLambdaIntegration, optionsWithAuthorizer);
+    teamReadLambdaResource.addMethod('GET', this.ab3FinalTable.teamReadLambdaIntegration, optionsWithAuthorizer);
 
     const teamMemberReadLambdaResource = this.api.root.addResource('TeamMember');
-    teamMemberReadLambdaResource.addMethod('GET', this.awb3Table.teamMemberReadLambdaIntegration, optionsWithAuthorizer);
+    teamMemberReadLambdaResource.addMethod('GET', this.ab3FinalTable.teamMemberReadLambdaIntegration, optionsWithAuthorizer);
 
     }
 

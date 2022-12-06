@@ -29,7 +29,7 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
 
     try {
         await dbClient.put({
-            TableName: 'awb3Table',
+            TableName: 'AB3-Table',
             Item: item
         }).promise()
     } catch (error) {

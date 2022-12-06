@@ -1,8 +1,8 @@
 import { DynamoDB } from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 
-const TABLE_NAME = 'awb3Table';
-const PRIMARY_KEY = 'User_Id';
+const TABLE_NAME = 'AB3-Table';
+const PRIMARY_KEY = 'PK';
 const dbClient = new DynamoDB.DocumentClient();
 
 export async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
@@ -22,23 +22,29 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
                 const queryResponse = await dbClient.query({
                     TableName: TABLE_NAME!,
                     ExpressionAttributeValues: {
-                        ':U': keyValue
+                        ':P': keyValue,
+                        ':S': 'profile'
                     },
-                    KeyConditionExpression: 'User_Id = :U',
-                    ProjectionExpression: 'User_Id, proficiency, first_name, last_name, service, team, title, user_name, email',
+                    KeyConditionExpression: 'PK = :P and SK = :S',
+                    ProjectionExpression: 'first_name, last_name, team, title, user_name, email',
                 }).promise();
                 result.body = JSON.stringify(queryResponse);
             }
         } else {
-            const queryResponse = await dbClient.scan({
-                TableName: TABLE_NAME!,
-                FilterExpression: "attribute_exists(first_name)",
-            }).promise();
-            result.body = JSON.stringify(queryResponse)
+                const profile = 'profile';
+                const queryResponse = await dbClient.query({
+                    TableName: TABLE_NAME!,
+                    IndexName: 'SK-gsi1-sk-index',
+                    ExpressionAttributeValues: {
+                        ':S': profile
+                    },
+                    KeyConditionExpression: 'SK = :S',
+                    ProjectionExpression: 'first_name, last_name, team, title, user_name, email',
+                }).promise();
+                result.body = JSON.stringify(queryResponse);
         }
     } catch (error) {
         result.body = error.message
     }
-
     return result;
 }
