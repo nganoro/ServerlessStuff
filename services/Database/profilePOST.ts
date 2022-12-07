@@ -18,7 +18,8 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
     const item = {
         PK: body.PK,
         SK: body.SK,
-        gsi1_sk: body.PK
+        gsi1_sk: body.PK,
+        skills: body.skills
     }
 
     try {

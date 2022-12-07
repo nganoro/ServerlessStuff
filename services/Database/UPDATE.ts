@@ -2,8 +2,8 @@ import { DynamoDB } from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 
 const TABLE_NAME = 'AB3-Table';
-const PRIMARY_KEY = 'User_Id';
-const SORT_KEY = 'proficiency';
+const PRIMARY_KEY = 'PK';
+const SORT_KEY = 'SK';
 const dbClient = new DynamoDB.DocumentClient();
 
 export async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
@@ -17,31 +17,31 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
     }
 
     const requestBody = typeof event.body == 'object'? event.body: JSON.parse(event.body);
-    const User_Id = event.queryStringParameters?.[PRIMARY_KEY];
-    const proficiency = event.queryStringParameters?.[SORT_KEY];
+    const PK = event.queryStringParameters?.[PRIMARY_KEY];
+    const SK = event.queryStringParameters?.[SORT_KEY];
 
         try {
-            if (requestBody && User_Id) {
+            if (requestBody && PK) {
                 const params = {
                     TableName: TABLE_NAME!,
                     Key: {
-                        [PRIMARY_KEY]: User_Id,
-                        [SORT_KEY]: proficiency
+                        [PRIMARY_KEY]: PK,
+                        [SORT_KEY]: SK
                     },
-                    UpdateExpression: 'set #title = :v_userTitle, #team = :v_team, #fName = :v_fName, #lName = :v_lName, #service = :v_service',
+                    UpdateExpression: 'set #title = :v_userTitle, #team = :v_team, #fName = :v_fName, #lName = :v_lName, #skills = :v_skills',
                     ExpressionAttributeNames: {
                         '#title': 'title',
                         '#team': 'team',
                         '#fName': 'first_name',
                         '#lName': 'last_name',
-                        '#service': 'service'
+                        '#skills': 'skills',
                     },
                     ExpressionAttributeValues: {
                         ':v_userTitle': requestBody.title,
                         ':v_team': requestBody.team,
                         ':v_fName': requestBody.first_name,
                         ':v_lName': requestBody.last_name,
-                        ':v_service': requestBody.service,
+                        ':v_skills': requestBody.skills
                     },
                     ReturnValues: 'UPDATED_NEW'
                 }

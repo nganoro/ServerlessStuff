@@ -15,7 +15,8 @@ export interface TableProps {
     deleteLambdaPath?: string,
     teamReadLambdaPath?: string,
     teamMemberReadLambdaPath?: string,
-    profilePostLambdaPath?: string
+    profilePostLambdaPath?: string,
+    profileReadLambdaPath?: string
 }
 
 export class DynamoDb {
@@ -31,6 +32,7 @@ export class DynamoDb {
     private teamReadLambda: NodejsFunction | undefined;
     private teamMemberReadLambda: NodejsFunction | undefined;
     private profilePostLambda: NodejsFunction | undefined;
+    private profileReadLambda: NodejsFunction | undefined;
 
     public postLambdaIntegration: LambdaIntegration;
     public readLambdaIntegration: LambdaIntegration;
@@ -39,6 +41,7 @@ export class DynamoDb {
     public teamReadLambdaIntegration: LambdaIntegration;
     public teamMemberReadLambdaIntegration: LambdaIntegration;
     public profilePostLambdaIntegeration: LambdaIntegration;
+    public profileReadLambdaIntegeration: LambdaIntegration;
 
     public constructor(stack: Stack, props: TableProps) {
         this.stack = stack;
@@ -121,6 +124,10 @@ export class DynamoDb {
             this.profilePostLambda = this.createSingleLambda(this.props.profilePostLambdaPath)
             this.profilePostLambdaIntegeration = new LambdaIntegration(this.profilePostLambda);
         }
+        if (this.props.profileReadLambdaPath){
+            this.profileReadLambda = this.createSingleLambda(this.props.profileReadLambdaPath)
+            this.profileReadLambdaIntegeration = new LambdaIntegration(this.profileReadLambda);
+        }
     }
 
     private grantTableRights(){
@@ -144,6 +151,9 @@ export class DynamoDb {
         }
         if(this.profilePostLambda){
             this.table.grantWriteData(this.profilePostLambda)
+        }
+        if(this.profileReadLambda){
+            this.table.grantReadData(this.profileReadLambda)
         }
     }
 
