@@ -33,6 +33,7 @@ export class ServerlessStuffStack extends cdk.Stack {
     updateLambdaPath: 'UPDATE',
     teamReadLambdaPath: 'teamREAD',
     teamMemberReadLambdaPath: 'teamMemberReadLambda',
+    profilePostLambdaPath: 'profilePOST'
   });
 
   // private awb3Table = new DynamoDb(this, {
@@ -123,6 +124,9 @@ export class ServerlessStuffStack extends cdk.Stack {
 
     const teamMemberReadLambdaResource = this.api.root.addResource('TeamMember');
     teamMemberReadLambdaResource.addMethod('GET', this.ab3FinalTable.teamMemberReadLambdaIntegration, optionsWithAuthorizer);
+
+    const postProfileLambdaResource = this.api.root.addResource('Profile');
+    postProfileLambdaResource.addMethod('POST', this.ab3FinalTable.profilePostLambdaIntegeration, optionsWithAuthorizer);
 
     }
 

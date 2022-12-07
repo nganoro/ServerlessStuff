@@ -16,15 +16,9 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
     const body = typeof event.body == 'object'? event.body: JSON.parse(event.body);
 
     const item = {
-        PK: body.user_name,
-        SK: 'profile',
-        last_name: body.last_name,
-        first_name: body.first_name,
-        team: body.team,
-        title: body.title,
-        email: body.email,
-        user_name: body.user_name,
-        gsi1_sk: body.user_name
+        PK: body.PK,
+        SK: body.SK,
+        gsi1_sk: body.PK
     }
 
     try {

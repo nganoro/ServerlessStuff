@@ -15,6 +15,7 @@ export interface TableProps {
     deleteLambdaPath?: string,
     teamReadLambdaPath?: string,
     teamMemberReadLambdaPath?: string,
+    profilePostLambdaPath?: string
 }
 
 export class DynamoDb {
@@ -29,6 +30,7 @@ export class DynamoDb {
     private deleteLambda: NodejsFunction | undefined;
     private teamReadLambda: NodejsFunction | undefined;
     private teamMemberReadLambda: NodejsFunction | undefined;
+    private profilePostLambda: NodejsFunction | undefined;
 
     public postLambdaIntegration: LambdaIntegration;
     public readLambdaIntegration: LambdaIntegration;
@@ -36,6 +38,7 @@ export class DynamoDb {
     public deleteLambdaIntegration: LambdaIntegration;
     public teamReadLambdaIntegration: LambdaIntegration;
     public teamMemberReadLambdaIntegration: LambdaIntegration;
+    public profilePostLambdaIntegeration: LambdaIntegration;
 
     public constructor(stack: Stack, props: TableProps) {
         this.stack = stack;
@@ -83,7 +86,7 @@ export class DynamoDb {
             },
             projectionType: ProjectionType.ALL,
             sortKey: {
-                name: 'gsi1-sk',
+                name: 'gsi1_sk',
                 type: AttributeType.STRING,
             }
         })
@@ -114,6 +117,10 @@ export class DynamoDb {
             this.teamMemberReadLambda = this.createSingleLambda(this.props.teamMemberReadLambdaPath)
             this.teamMemberReadLambdaIntegration = new LambdaIntegration(this.teamMemberReadLambda);
         }
+        if (this.props.profilePostLambdaPath){
+            this.profilePostLambda = this.createSingleLambda(this.props.profilePostLambdaPath)
+            this.profilePostLambdaIntegeration = new LambdaIntegration(this.profilePostLambda);
+        }
     }
 
     private grantTableRights(){
@@ -134,6 +141,9 @@ export class DynamoDb {
         }
         if(this.teamMemberReadLambda){
             this.table.grantReadData(this.teamMemberReadLambda)
+        }
+        if(this.profilePostLambda){
+            this.table.grantWriteData(this.profilePostLambda)
         }
     }
 
