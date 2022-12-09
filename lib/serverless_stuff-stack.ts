@@ -34,20 +34,9 @@ export class ServerlessStuffStack extends cdk.Stack {
     teamReadLambdaPath: 'teamREAD',
     teamMemberReadLambdaPath: 'teamMemberReadLambda',
     profilePostLambdaPath: 'profilePOST',
-    profileReadLambdaPath: 'profileREAD'
+    profileReadLambdaPath: 'profileREAD',
+    profileUpdateLambdaPath: 'profileUPDATE'
   });
-
-  // private awb3Table = new DynamoDb(this, {
-  //       tableName: 'awb3TableRemove',
-  //       primaryKey: 'User_Id',
-  //       sortKey: 'proficiency',
-  //       postLambdaPath: 'POST',
-  //       readLambdaPath: 'READ',
-  //       updateLambdaPath: 'UPDATE',
-  //       teamReadLambdaPath: 'teamREAD',
-  //       teamMemberReadLambdaPath: 'teamMemberReadLambda',
-  //     }
-  // )
 
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -129,44 +118,8 @@ export class ServerlessStuffStack extends cdk.Stack {
     const postProfileLambdaResource = this.api.root.addResource('Profile');
     postProfileLambdaResource.addMethod('POST', this.ab3FinalTable.profilePostLambdaIntegeration, optionsWithAuthorizer);
     postProfileLambdaResource.addMethod('GET', this.ab3FinalTable.profileReadLambdaIntegeration, optionsWithAuthorizer);
+    postProfileLambdaResource.addMethod('PUT', this.ab3FinalTable.profileUpdateLambdaIntegeration, optionsWithAuthorizer);
+
     }
 
-    // private initializeSuffix() {
-    //     const shortStackId = cdk.Fn.select(2, cdk.Fn.split('/', this.stackId));
-    //     const Suffix = cdk.Fn.select(4, cdk.Fn.split('-', shortStackId));
-    //     this.suffix = Suffix;
-    // }
-
-    // private initializeAb3AvatarBucket() {
-    //     this.ab3AvatatBucket = new Bucket(this, 'awb3-avatar', {
-    //         bucketName: 'awb3-avatar-' + this.suffix,
-    //         publicReadAccess: false,
-    //         cors: [{
-    //             allowedMethods: [
-    //                 HttpMethods.HEAD,
-    //                 HttpMethods.GET,
-    //                 HttpMethods.PUT,
-    //                 HttpMethods.DELETE
-    //             ],
-    //             allowedOrigins: ['*'],
-    //             allowedHeaders: ['*']
-    //         }],
-    //     });
-    //
-    //     this.ab3AvatatBucket.addToResourcePolicy(
-    //         new iam.PolicyStatement({
-    //             effect: iam.Effect.ALLOW,
-    //             principals: [new iam.ServicePrincipal('lambda.amazonaws.com')],
-    //             actions: [
-    //                 's3:PutObject',
-    //                 's3:PutObjectAcl'
-    //             ],
-    //             resources: [this.ab3AvatatBucket.bucketArn + '/*'],
-    //         }),
-    //     );
-    //
-    //     new cdk.CfnOutput(this, 'spaces-photos-bucket-name', {
-    //         value: this.ab3AvatatBucket.bucketName
-    //     })
-    // }
 }
