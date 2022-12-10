@@ -19,7 +19,7 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
         PK: body.PK,
         SK: body.SK,
         gsi1_sk: body.PK,
-        skills: body.skill
+        user_skills: body.skill
     }
 
     try {

@@ -28,12 +28,14 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
                     [PRIMARY_KEY]: PK,
                     [SORT_KEY]: SK
                 },
-                UpdateExpression: 'set #skills = :v_skills',
+                UpdateExpression: 'set #skills = :v_skills, #gsi1_sk = :v_gsi1_sk',
                 ExpressionAttributeNames: {
-                    '#skills': 'skills'
+                    '#skills': 'user_skills',
+                    '#gsi1_sk': 'gsi1_sk'
                 },
                 ExpressionAttributeValues: {
-                    ':v_skills': requestBody.skill
+                    ':v_skills': requestBody.skill,
+                    ':v_gsi1_sk': requestBody.PK
                 },
                 ReturnValues: 'UPDATED_NEW'
             }

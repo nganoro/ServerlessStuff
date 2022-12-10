@@ -72,9 +72,9 @@ export class DynamoDb {
         })
 
         this.table.addGlobalSecondaryIndex({
-            indexName: "service-SK-index",
+            indexName: "userSkills-gsi1_sk-index",
             partitionKey: {
-                name: 'service',
+                name: 'user_skills',
                 type: AttributeType.STRING,
             },
             projectionType: ProjectionType.ALL,
