@@ -3,6 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda
 
 const TABLE_NAME = 'AB3-Table';
 const PRIMARY_KEY = 'PK';
+const SORT_KEY = 'SK';
 const dbClient = new DynamoDB.DocumentClient();
 
 export async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
@@ -27,6 +28,23 @@ export async function handler(event: APIGatewayProxyEvent, context: Context): Pr
                     },
                     KeyConditionExpression: 'PK = :P and SK = :S',
                     ProjectionExpression: 'first_name, last_name, team, title, user_name, email',
+                }).promise();
+                result.body = JSON.stringify(queryResponse);
+            } else if (SORT_KEY! in event.queryStringParameters) {
+                const sortKeyValue = event.queryStringParameters[SORT_KEY!];
+                const queryResponse = await dbClient.query({
+                    TableName: TABLE_NAME!,
+                    IndexName: 'SK-gsi1-sk-index',
+                    ExpressionAttributeNames :{
+                        '#expert': 'expert'
+                    },
+                    ExpressionAttributeValues: {
+                        ':S': sortKeyValue,
+                        ':expert': true
+                    },
+                    KeyConditionExpression: 'SK = :S',
+                    ProjectionExpression: 'first_name, last_name, team, title, user_name, email',
+                    FilterExpression: "#expert = :expert"
                 }).promise();
                 result.body = JSON.stringify(queryResponse);
             }
