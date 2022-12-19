@@ -48,9 +48,6 @@ export class ServerlessStuffStack extends cdk.Stack {
     super(scope, id, props);
 
     this.authorizer = new Authorization(this, this.api);
-    // this.initializeSuffix();
-    // this.initializeAb3AvatarBucket();
-    // this.policies = new Policies(this.ab3AvatatBucket);
 
     const images_bucket = new Bucket(
         this, 'ImagesBucket', {
@@ -127,7 +124,7 @@ export class ServerlessStuffStack extends cdk.Stack {
     postProfileLambdaResource.addMethod('PUT', this.ab3FinalTable.profileUpdateLambdaIntegeration, optionsWithAuthorizer);
     postProfileLambdaResource.addMethod('DELETE', this.ab3FinalTable.deleteLambdaIntegration, optionsWithAuthorizer);
 
-        //website hosting bucket
+    //website hosting bucket
     const ab3SiteBucket_Natnael = new Bucket(
         this, 'ab3SiteBucket_Natnael', {
             publicReadAccess: false,
@@ -142,13 +139,10 @@ export class ServerlessStuffStack extends cdk.Stack {
                 allowedHeaders: ['*']
             }],
             bucketName: site_url,
-            websiteIndexDocument: 'index.html'
+            websiteIndexDocument: 'index.html',
+            websiteErrorDocument: 'index.html',
         }
     )
-
-
-    //Cloudfront certificates
-    // const certificationArn = new acm.Dns
 
     // CloudFront distributions
     const cfIndentity = new CloudFront.OriginAccessIdentity(this, 'cfId');
@@ -172,9 +166,6 @@ export class ServerlessStuffStack extends cdk.Stack {
                 }],
             }
         ],
-        // viewerCertificate: CloudFront.ViewerCertificate.fromCloudFrontDefaultCertificate(
-        //     'd111111abcdef8.cloudfront.net'
-        // ),
     })
     }
 }
