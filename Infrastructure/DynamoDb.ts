@@ -111,10 +111,10 @@ export class DynamoDb {
             this.updateLambda = this.createSingleLambda(this.props.updateLambdaPath)
             this.updateLambdaIntegration = new LambdaIntegration(this.updateLambda);
         }
-        // if (this.props.deleteLambdaPath) {
-        //     this.deleteLambda = this.createSingleLambda(this.props.deleteLambdaPath);
-        //     this.deleteLambdaIntegration = new LambdaIntegration(this.deleteLambda);
-        // }
+        if (this.props.deleteLambdaPath) {
+            this.deleteLambda = this.createSingleLambda(this.props.deleteLambdaPath);
+            this.deleteLambdaIntegration = new LambdaIntegration(this.deleteLambda);
+        }
         if (this.props.teamReadLambdaPath) {
             this.teamReadLambda = this.createSingleLambda(this.props.teamReadLambdaPath)
             this.teamReadLambdaIntegration = new LambdaIntegration(this.teamReadLambda);
@@ -147,9 +147,9 @@ export class DynamoDb {
         if(this.updateLambda){
             this.table.grantWriteData(this.updateLambda)
         }
-        // if(this.deleteLambda){
-        //     this.table.grantWriteData(this.deleteLambda)
-        // }
+        if(this.deleteLambda){
+            this.table.grantWriteData(this.deleteLambda)
+        }
         if(this.teamReadLambda){
             this.table.grantReadData(this.teamReadLambda)
         }

@@ -36,6 +36,7 @@ export class ServerlessStuffStack extends cdk.Stack {
     postLambdaPath: 'POST',
     readLambdaPath: 'READ',
     updateLambdaPath: 'UPDATE',
+    deleteLambdaPath: 'DELETE',
     teamReadLambdaPath: 'teamREAD',
     teamMemberReadLambdaPath: 'teamMemberReadLambda',
     profilePostLambdaPath: 'profilePOST',
@@ -124,8 +125,9 @@ export class ServerlessStuffStack extends cdk.Stack {
     postProfileLambdaResource.addMethod('POST', this.ab3FinalTable.profilePostLambdaIntegeration, optionsWithAuthorizer);
     postProfileLambdaResource.addMethod('GET', this.ab3FinalTable.profileReadLambdaIntegeration, optionsWithAuthorizer);
     postProfileLambdaResource.addMethod('PUT', this.ab3FinalTable.profileUpdateLambdaIntegeration, optionsWithAuthorizer);
+    postProfileLambdaResource.addMethod('DELETE', this.ab3FinalTable.deleteLambdaIntegration, optionsWithAuthorizer);
 
-    //website hosting bucket
+        //website hosting bucket
     const ab3SiteBucket_Natnael = new Bucket(
         this, 'ab3SiteBucket_Natnael', {
             publicReadAccess: false,
